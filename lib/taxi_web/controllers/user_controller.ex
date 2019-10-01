@@ -8,13 +8,17 @@ defmodule TaxiWeb.UserController do
 		users = Repo.all(User)
 		render(conn, "index.html", users: users)
 	end
+
+  def new(conn, _params) do
+    changeset = User.changeset(%User{}, %{})
+    render(conn, "new.html", changeset: changeset)
+  end
+
+  def create(conn, %{"user" => user_params}) do
+    changeset = User.changeset(%User{}, user_params)
+
+    Repo.insert(changeset)
+    redirect(conn, to: Routes.user_path(conn, :index))
+  end
+
 end
-
-#alias Taxi.{Repo, Accounts.User}
-
-#@spec index(Plug.Conn.t(),any)::Plug.Conn.t()
-#def index(conn, _params) do
-#	users = Repo.all(User)
-#	render(conn, "index.html", users: users) #users = Taxi.Repo.all(Taxi.Accounts.User)
-#end
-
